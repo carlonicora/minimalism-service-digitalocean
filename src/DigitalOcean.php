@@ -42,7 +42,6 @@ class DigitalOcean extends AbstractService
      * @param string $MINIMALISM_SERVICE_DIGITALOCEAN_REGION
      * @param string $MINIMALISM_SERVICE_DIGITALOCEAN_BUCKET
      * @param string $MINIMALISM_SERVICE_DIGITALOCEAN_ENDPOINT
-     * @param string $MINIMALISM_SERVICE_DIGITALOCEAN_UPLOAD_EXPIRATION
      */
     public function __construct(
         private readonly string $MINIMALISM_SERVICE_DIGITALOCEAN_ACCESS_KEY,
@@ -50,7 +49,6 @@ class DigitalOcean extends AbstractService
         private readonly string $MINIMALISM_SERVICE_DIGITALOCEAN_REGION,
         private readonly string $MINIMALISM_SERVICE_DIGITALOCEAN_BUCKET,
         private readonly string $MINIMALISM_SERVICE_DIGITALOCEAN_ENDPOINT,
-        private readonly string $MINIMALISM_SERVICE_DIGITALOCEAN_UPLOAD_EXPIRATION,
     )
     {
         $this->digitalOceanUrl = $this->MINIMALISM_SERVICE_DIGITALOCEAN_ENDPOINT;
@@ -99,9 +97,8 @@ class DigitalOcean extends AbstractService
             $result = $this->client()->putObject([
                 'Bucket' => $this->MINIMALISM_SERVICE_DIGITALOCEAN_BUCKET,
                 'Key' => $remoteFile,
-                'Expires' => $this->MINIMALISM_SERVICE_DIGITALOCEAN_UPLOAD_EXPIRATION,
                 'SourceFile' => $localFile,
-                'ACL' => 'public-read',
+                'ACL' => 'private',
                 'ContentType' => self::EXTENSIONS[$extension]
             ]);
             return substr($result->get('ObjectURL'), strlen($this->digitalOceanUrl));
